@@ -1,6 +1,6 @@
 import express from 'express'
 import User from '../models/user.js'
-import { deleteUser, getAllUsers, getUser, updateUser } from '../controllers/userController.js';
+import { deleteMe, deleteUser, getAllUsers, getUser, updateUser } from '../controllers/userController.js';
 import { verifyAdmin, verifyUser } from '../utils/verify.js';
 const router = express.Router();
 
@@ -13,8 +13,11 @@ router.get('/', verifyAdmin, getAllUsers)
 //Update
 router.put('/:id', verifyUser, updateUser)
 
-//Delete
-router.delete('/:id',verifyUser, deleteUser)
+//DeleteMe
+router.delete('/:id',verifyUser, deleteMe)
+
+//DeleteAnyAccount 
+router.delete('/:id',verifyAdmin, deleteUser)
 
 
 export default router
