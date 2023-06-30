@@ -43,7 +43,7 @@ export const login = async(req,res,next)=>{
             id : user._id,
             Admin : user.isAdmin
         }, process.env.JWT_SEC_KEY)
-        
+        console.log(user._id,user.isAdmin)
         const {password, isAdmin, ...otherDetails} = user._doc
         res.cookie("access_token", token, {httpOnly : true}).status(200).json({ details: { ...otherDetails }, isAdmin })
     }

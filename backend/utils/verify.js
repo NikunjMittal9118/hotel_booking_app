@@ -1,7 +1,9 @@
 import jwt from "jsonwebtoken"
 import { createError } from "./error.js"
+import dotenv from 'dotenv'
+dotenv.config()
 
-export const verifyToken = (req,res,next)=>{
+const verifyToken = (req,res,next)=>{
     const token =  req.cookies.access_token
     if(!token){
         return next(createError(404,"Token not found!"))
@@ -10,6 +12,7 @@ export const verifyToken = (req,res,next)=>{
         if(err){
             return next(createError(404,"Token is not valid!"))
         }
+        console.log(decodedToken)
         req.user = decodedToken //defining new property in req object
         next()
     })
