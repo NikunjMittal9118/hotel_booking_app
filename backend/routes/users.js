@@ -1,25 +1,20 @@
 import express from 'express'
 import User from '../models/user.js'
 import { deleteUser, getAllUsers, getUser, updateUser } from '../controllers/userController.js';
-import { verifyToken } from '../utils/verify.js';
+import { verifyAdmin, verifyUser } from '../utils/verify.js';
 const router = express.Router();
 
-//Verify user
-router.get('/checkAuthenitication', verifyToken, (req,res)=>{
-    res.send("Welcome User, You are Successfully verified!")
-})
-
 //Read
-router.get('/:id',getUser)
+router.get('/:id', verifyUser, getUser)
 
-//Get All
-router.get('/',getAllUsers)
+//Read All
+router.get('/', verifyAdmin, getAllUsers)
 
 //Update
-router.put('/:id',updateUser)
+router.put('/:id', verifyUser, updateUser)
 
 //Delete
-router.delete('/:id',deleteUser)
+router.delete('/:id',verifyUser, deleteUser)
 
 
 export default router

@@ -1,21 +1,22 @@
 import express from 'express'
 import { createHotel, deleteHotel, read, readAll, updateHotel } from '../controllers/hotelController.js';
+import { verifyAdmin } from '../utils/verify.js';
 const router = express.Router();
 
 //Create 
-router.post('/',createHotel)
+router.post('/', verifyAdmin , createHotel)
 
 //Read
 router.get('/:id',read)
 
-//Get All
+//Read All
 router.get('/',readAll)
 
 //Update
-router.put('/:id',updateHotel)
+router.put('/:id', verifyAdmin, updateHotel)
 
 //Delete
-router.delete('/:id',deleteHotel)
+router.delete('/:id', verifyAdmin, deleteHotel)
 
 export default router
 
@@ -33,6 +34,18 @@ export default router
     "ratings" : "3.5",
     "cheapestPrice" : "1900",
     "featured" : "false"
+}
+
+{
+    "name" : "Hotel Karakuri Circus",
+    "type" : "Entertainment and Food",
+    "city" : "Japan",
+    "address" : "Shanghai",
+    "distance" : "3500Km",
+    "description" : "Best hotel for Entertainment and every type of Food available",
+    "ratings" : "5",
+    "cheapestPrice" : "4999",
+    "featured" : "True"
 }
 
 */
