@@ -5,7 +5,8 @@ import { createError } from "../utils/error.js"
 export const getUser = async (req,res,next)=>{
     try{
         const user = await User.findById(req.params.id)
-        res.status(200).json(user)
+        const {password, ...YourData} = user._doc
+        res.status(200).json({YourData})
     }
     catch(err){
         next(err)

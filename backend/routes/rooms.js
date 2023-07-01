@@ -1,6 +1,7 @@
 import express from 'express'
 import Room from '../models/room.js'
 import { createRoom, deleteRoom, read, readAll, updateRoom } from '../controllers/roomController.js';
+import { verifyAdmin } from "../utils/verify.js"
 const router = express.Router();
 
 //Create 
