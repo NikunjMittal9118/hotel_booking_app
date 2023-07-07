@@ -35,10 +35,12 @@ export const countByCity = async (req, res, next) => {
     try {
       const list = await Promise.all(
         cities.map((city) => {
+          let obj = [city,Hotel.countDocuments({ city: city })]
+          console.log(obj)
           return Hotel.countDocuments({ city: city })
         })
       )
-      res.status(200).json(list)
+      res.status(200).send(list)
     } catch (err) {
       next(err)
     }
