@@ -7,9 +7,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useState } from "react";
 import useFetch from "../../hooks/useFetch"
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SearchContext } from "../../context/SearchContext";
-
+import { AuthContext } from "../../context/AuthContext";
+import Reserve from "../../components/reserve/Reserve"
 
 const Hotel = () => {
   const location = useLocation()
@@ -20,6 +21,8 @@ const Hotel = () => {
   console.log(data)
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [reserve, setReserve] = useState(false)
+  const navigate = useNavigate()
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -39,6 +42,8 @@ const Hotel = () => {
   };
 
   const { date, options } = useContext(SearchContext)
+  const {user} = useContext(AuthContext)
+
   const MILLISECONS_PER_DAY = 1000 * 60 * 60 * 24;
   function daysDifference(date1, date2){
     const timeDiff = Math.abs(date2.getTime() - date1.getTime())
@@ -47,6 +52,14 @@ const Hotel = () => {
   }
   const totalDays = (daysDifference(date[0].startDate, date[0].endDate))
   
+  const click = async () => {
+    if(user){
+      setReserve(true)
+    }
+    else{
+      navigate('/login')
+    }
+  }
   return (
     <div>
       <Navbar />
@@ -116,7 +129,7 @@ const Hotel = () => {
               <h2>
                 <b>Rs.{totalDays * data.cheapestPrice * options.room}</b> ({totalDays} nights)
               </h2>
-              <button>Reserve or Book Now!</button>
+              <button onClick={click}>Reserve or Book Now!</button>
             </div>
           </div>
         </div>
@@ -124,6 +137,7 @@ const Hotel = () => {
         <Footer />
       </div>
       }
+      {reserve && <Reserve /> }
     </div>
   );
 };
