@@ -10,7 +10,6 @@ router.post('/', verifyAdmin , createHotel)
 router.get('/find/:id',read)
 
 //Read All
-
 router.get('/',readAll)
 router.get('/countByCity', countByCity)
 router.get('/countByType', countByType)

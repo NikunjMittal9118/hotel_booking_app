@@ -20,11 +20,20 @@ export const read = async (req,res,next)=>{
         next(err)
     }
 }
-
 export const readAll = async (req,res,next)=>{
+    var {min, max, ...others} = req.query
+    if(min === undefined){
+        min = 1
+    }
+    if(max === undefined){
+        max = 10000000000
+    }
     try{
-        const hotels = await Hotel.find()
-        res.status(200).json(hotels) 
+        const hotels = await Hotel.find({
+            ...others,
+            cheapestPrice: {$gt: min, $lt: max}
+        })
+        res.status(200).json(hotels)
     }
     catch(err){
         next(err)
@@ -35,20 +44,49 @@ export const countByCity = async (req, res, next) => {
     try {
       const list = await Promise.all(
         cities.map((city) => {
-          let obj = [city,Hotel.countDocuments({ city: city })]
-          console.log(obj)
+          let k = Hotel.countDocuments({ city: city })
+          let obj = [city,k]
+          console.log(typeof k)
           return Hotel.countDocuments({ city: city })
         })
       )
       res.status(200).send(list)
-    } catch (err) {
+    } 
+    catch (err) {
       next(err)
     }
 }
 export const countByType = async (req,res,next)=>{
     try{
-        const hotels = await Hotel.find()
-        res.status(200).json(hotels) 
+        const hotelCount = await Hotel.countDocuments({type: "hotel"})
+        const appartmentCount = await Hotel.countDocuments({type: "appartment"})
+        const resortCount = await Hotel.countDocuments({type: "resort"})
+        const villaCount = await Hotel.countDocuments({type: "villa"})
+        const cabinCount = await Hotel.countDocuments({type: "cabin"})
+        res.status(200).json(
+            [
+                {
+                    type: "hotels",
+                    count: hotelCount
+                },
+                {
+                    type: "appartments",
+                    count: appartmentCount
+                },
+                {
+                    type: "resorts",
+                    count: resortCount
+                },
+                {
+                    type: "villas",
+                    count: villaCount
+                },
+                {
+                    type: "cabins",
+                    count: cabinCount
+                }
+            ]
+        ) 
     }
     catch(err){
         next(err)

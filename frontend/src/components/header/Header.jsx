@@ -2,13 +2,16 @@ import { faBed, faCalendarDays, faCar, faPerson, faPlane, faTaxi } from "@fortaw
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./header.css";
 import { DateRange } from "react-date-range";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { SearchContext } from "../../context/SearchContext";
+
 
 const Header = ({ type }) => {
+  console.log("I am in header")
   const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
   const [date, setDate] = useState([
@@ -36,7 +39,11 @@ const Header = ({ type }) => {
     });
   };
 
+  const { dispatch } = useContext(SearchContext)
+
   const handleSearch = () => {
+    console.log("I am in handleSearch", date)
+    dispatch({type: "NEW_SEARCH", payload: { destination, date, options }})
     navigate("/hotels", { state: { destination, date, options } });
   };
 
@@ -72,7 +79,7 @@ const Header = ({ type }) => {
             </h1>
             <p className="headerDesc">
               Get rewarded for your travels – unlock instant savings of 10% or
-              more with a free Lamabooking account
+              more with a free Booking account
             </p>
             <button className="headerBtn">Sign in / Register</button>
             <div className="headerSearch">
